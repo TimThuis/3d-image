@@ -4,9 +4,11 @@ const back = elements[0];
 const middleBack = elements[1];
 const middleFront = elements[2];
 const front = elements[3];
+const platform = window.navigator.platform;
+const platformChecker = new RegExp('Android|webOS|iPhone|iPad')
 
 
-if (window.navigator.platform === 'iPhone') {
+if (platformChecker.test(platform)) {
   window.addEventListener('devicemotion', _.debounce(setPosition, 50, {
     maxWait: 50,
   }));
