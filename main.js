@@ -1,25 +1,55 @@
 const elements = document.querySelectorAll('.element')
-const back = elements[0];
-const middleBack = elements[1];
-const middleFront = elements[2];
-const front = elements[3];
-const platform = window.navigator.platform;
-const platformChecker = new RegExp('Android|webOS|iPhone|iPad')
+const backEl = elements[0];
+const middleBackEl = elements[1];
+const middleFrontEl = elements[2];
+const frontEl = elements[3];
+const platform = window.navigator.platform
+const regex = new RegExp('/Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile/');
+const windowHeight = window.innerHeight;
+const windowWidth = window.innerWidth;
+const windowHeightCenter = windowHeight / 2;
+const windowWidthCenter = windowWidth / 2;
+const velocityWeb = .25;
+const velocityMobile = .5;
 
-if (platformChecker.test(platform)) {
-  window.addEventListener('devicemotion', _.debounce(setPosition, 50, {
-    maxWait: 50,
+let pMobileY;
+let pMobileX;
+let pWebY;
+let pWebX;
+
+if (regex.test(platform)) {
+  // alert('The mobile-platform your using is: ' + platform);
+  window.addEventListener('devicemotion', _.debounce(positionMobile, 100, {
+    maxWait: 100,
   }));
 } else {
-  alert("for now the animation can only be triggerd from a mobile platform")
+  console.log('The web-platform your using is: ' + platform)
+  window.addEventListener('mousemove', positionWeb);
 }
 
-function setPosition(event) {
-  let accelerationX = event.accelerationIncludingGravity.x;
-  let positionX = _.round(accelerationX * 8);
+function positionWeb(e) {
+  pWebY = e.screenY;
+  pWebX = e.screenX;
+  let percentWebY = (pWebY / windowHeightCenter * 150) - 100;
+  let percentWebX = (pWebX / windowWidthCenter * 200) - 200;
+  setPostionElements(percentWebY, percentWebX, velocityWeb)
+}
 
-  back.style.transform = 'rotateY(' + positionX + 'deg) translateZ(-600px)'
-  middleBack.style.transform = 'rotateY(' + positionX + 'deg) translateZ(-300px)'
-  middleFront.style.transform = 'rotateY(' + positionX + 'deg) translateZ(-150px)'
-  front.style.transform = 'rotateY(' + positionX + 'deg) translateZ(0px)'
+function positionMobile(e) {
+  pMobileY = e.accelerationIncludingGravity.y;
+  pMobileX = e.accelerationIncludingGravity.x;
+  let percentMobileY = pMobileY * 15 + 75;
+  // let percentMobileX = -pMobileX * 10;
+  let percentMobileX = 0
+  setPostionElements(percentMobileY, percentMobileX, velocityMobile)
+}
+
+function setPostionElements(y, x, v) {
+  let rotationY = _.round(y * v, 2);
+  let rotationX = _.round(-x * v, 2);
+  console.log(rotationY, rotationX);
+  backEl.style.transform = `rotateX(${rotationY}deg) rotateY(${rotationX}deg) translateZ(-600px)`;
+  middleBackEl.style.transform = `rotateX(${rotationY}deg) rotateY(${rotationX}deg) translateZ(-300px)`;
+  middleFrontEl.style.transform = `rotateX(${rotationY}deg) rotateY(${rotationX}deg) translateZ(-150px)`;
+  frontEl.style.transform = `rotateX(${rotationY}deg) rotateY(${rotationX}deg) translateZ(0px)`;
 }
