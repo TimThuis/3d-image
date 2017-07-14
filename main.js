@@ -18,13 +18,13 @@ let pMobileX;
 let pWebY;
 let pWebX;
 
+alert('The platform your using is: ' + platform);
+
 if (regex.test(platform)) {
-  // alert('The mobile-platform your using is: ' + platform);
   window.addEventListener('devicemotion', _.debounce(positionMobile, 100, {
     maxWait: 100,
   }));
 } else {
-  console.log('The web-platform your using is: ' + platform)
   window.addEventListener('mousemove', positionWeb);
 }
 
