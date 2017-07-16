@@ -18,8 +18,6 @@ let pMobileX;
 let pWebY;
 let pWebX;
 
-alert('The platform your using is: ' + platform);
-
 if (regex.test(platform)) {
   window.addEventListener('devicemotion', _.debounce(positionMobile, 100, {
     maxWait: 100,
@@ -31,7 +29,7 @@ if (regex.test(platform)) {
 function positionWeb(e) {
   pWebY = e.screenY;
   pWebX = e.screenX;
-  let percentWebY = (pWebY / windowHeightCenter * 150) - 100;
+  let percentWebY = (pWebY / windowHeightCenter * 150) - 200;
   let percentWebX = (pWebX / windowWidthCenter * 200) - 200;
   setPostionElements(percentWebY, percentWebX, velocityWeb)
 }
@@ -39,7 +37,7 @@ function positionWeb(e) {
 function positionMobile(e) {
   pMobileY = e.accelerationIncludingGravity.y;
   pMobileX = e.accelerationIncludingGravity.x;
-  let percentMobileY = pMobileY * 15 + 50;
+  let percentMobileY = pMobileY * 20 + 100;
   let percentMobileX = -pMobileX * 15;
   setPostionElements(percentMobileY, percentMobileX, velocityMobile)
 }
